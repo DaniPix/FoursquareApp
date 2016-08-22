@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">FoursquareApp</string>
+    <string name="app_subtitle">Search the nearest venues at your hearts content</string>
+
+    <string name="searchable">Search View</string>
+    <string name="hint_sushi">Search for sushi nearby</string>
+</resources>
