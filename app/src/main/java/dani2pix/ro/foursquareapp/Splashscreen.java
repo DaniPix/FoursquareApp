@@ -3,7 +3,6 @@ package dani2pix.ro.foursquareapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -28,7 +27,14 @@ public class SplashScreen extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     MY_PERMISSION_ACCESS_FINE_LOCATION);
         } else {
-            startDelayedFoursquareActivity();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(SplashScreen.this, FoursquareActivity.class);
+                    startActivity(intent);
+                }
+            }, 3000);
         }
     }
 
@@ -38,19 +44,15 @@ public class SplashScreen extends AppCompatActivity {
         if (requestCode == MY_PERMISSION_ACCESS_FINE_LOCATION &&
                 grantResults.length > 0 &&
                 grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startDelayedFoursquareActivity();
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(SplashScreen.this, FoursquareActivity.class);
+                    startActivity(intent);
+                }
+            }, 3000);
         }
-    }
-
-    private void startDelayedFoursquareActivity() {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreen.this, FoursquareActivity.class);
-                startActivity(intent);
-            }
-        }, 1000);
     }
 }
 

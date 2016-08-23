@@ -1,9 +1,6 @@
 package dani2pix.ro.foursquareapp;
 
 
-import android.app.SearchManager;
-import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.List;
-
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,6 +69,8 @@ public class VenuesFragment extends Fragment implements VenueView {
         if (venues != null && !venues.isEmpty()) {
             mVenuesList.setAdapter(new VenuesAdapter(getContext(), venues, R.layout.venues_item_layout));
             mVenuesList.setLayoutManager(new LinearLayoutManager(getContext()));
+        } else {
+            Toast.makeText(getContext(), "Nothing around you...where the fuck are you?", Toast.LENGTH_SHORT).show();
         }
     }
 
