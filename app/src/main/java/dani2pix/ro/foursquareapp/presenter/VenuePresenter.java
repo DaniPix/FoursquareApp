@@ -39,7 +39,12 @@ public class VenuePresenter implements Presenter<VenueView> {
         }
     }
 
-    public void loadVenues(String location) {
+    public void loadVenues(String query, String location) {
+        if (query.isEmpty() || location.isEmpty()) {
+            return;
+        }
+
+
         if (subscription != null) {
             subscription.unsubscribe();
         }
@@ -49,8 +54,8 @@ public class VenuePresenter implements Presenter<VenueView> {
         params.put("client_id", RestConstants.CLIENT_ID);
         params.put("client_secret", RestConstants.CLIENT_SECRET);
         params.put("v", "20130815");
-        params.put("ll", "40.7,-74");
-        params.put("query", "sushi");
+        params.put("ll", location);
+        params.put("query", query);
 
         FoursquareApplication application = new FoursquareApplication();
         FoursquareService service = application.getFourSquareService();

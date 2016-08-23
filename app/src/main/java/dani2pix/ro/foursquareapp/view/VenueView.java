@@ -1,5 +1,7 @@
 package dani2pix.ro.foursquareapp.view;
 
+import android.location.Location;
+
 import java.util.List;
 
 import dani2pix.ro.foursquareapp.model.Venue;
@@ -9,4 +11,8 @@ import dani2pix.ro.foursquareapp.model.Venue;
  */
 public interface VenueView extends View {
     void showVenues(List<Venue> venues);
+
+    void onLocationUpdated(Location location);
+
+    void onLocationUnavailable();
 }

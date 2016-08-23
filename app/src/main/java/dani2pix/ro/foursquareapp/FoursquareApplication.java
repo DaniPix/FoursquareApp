@@ -1,8 +1,5 @@
 package dani2pix.ro.foursquareapp;
 
-import android.app.Application;
-import android.content.Context;
-
 import dani2pix.ro.foursquareapp.model.FoursquareService;
 import rx.Scheduler;
 import rx.schedulers.Schedulers;
@@ -17,7 +14,7 @@ public class FoursquareApplication {
 
     public FoursquareService getFourSquareService() {
         if (mFoursquareService == null) {
-            return FoursquareService.Factory.create();
+            mFoursquareService = FoursquareService.Factory.create();
         }
         return mFoursquareService;
     }
