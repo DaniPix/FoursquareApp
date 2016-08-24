@@ -1,6 +1,5 @@
 package dani2pix.ro.foursquareapp.model;
 
-import java.util.List;
 import java.util.Map;
 
 import dani2pix.ro.foursquareapp.constants.RestConstants;
@@ -8,6 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 import rx.Observable;
 
@@ -19,6 +19,8 @@ public interface FoursquareService {
     @GET(RestConstants.SEARCH_VENUES)
     Observable<Response> fetchVenues(@QueryMap Map<String, String> queryParams);
 
+    @GET(RestConstants.SEARCH_VENUES_PHOTOS)
+    Observable<PhotosResponse> fetchVenuePhotos(@Path("venueId") String venueId, @QueryMap Map<String, String> queryParams);
 
     class Factory {
         public static FoursquareService create() {

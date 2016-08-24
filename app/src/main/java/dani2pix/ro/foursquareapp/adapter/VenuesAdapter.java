@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -45,6 +48,12 @@ public class VenuesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             Venue venue = mVenues.get(position);
             venuesHolder.name.setText(venue.getName());
             venuesHolder.location.setText(venue.getLocation().getAddress());
+            Picasso.with(mContext)
+                    .load(venue.getPhoto())
+                    .fit()
+                    .centerCrop()
+                    .placeholder(R.drawable.logo)
+                    .into(venuesHolder.photo);
         }
     }
 
@@ -59,6 +68,8 @@ public class VenuesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         TextView name;
         @BindView(R.id.venueLocation)
         TextView location;
+        @BindView(R.id.venuePhoto)
+        ImageView photo;
 
         public VenuesHolder(View itemView) {
             super(itemView);

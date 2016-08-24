@@ -12,6 +12,7 @@ public class Response {
     public SearchResponse response;
 
 
+
     public class SearchResponse {
 
         @SerializedName("venues")
@@ -26,5 +27,4 @@ public class Response {
             this.venues = venues;
         }
     }
-
 }
