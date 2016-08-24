@@ -17,7 +17,7 @@ import rx.Observable;
  */
 public interface FoursquareService {
     @GET(RestConstants.SEARCH_VENUES)
-    Observable<Response> fetchVenues(@QueryMap Map<String, String> queryParams);
+    Observable<VenuesResponse> fetchVenues(@QueryMap Map<String, String> queryParams);
 
     @GET(RestConstants.SEARCH_VENUES_PHOTOS)
     Observable<PhotosResponse> fetchVenuePhotos(@Path("venueId") String venueId, @QueryMap Map<String, String> queryParams);

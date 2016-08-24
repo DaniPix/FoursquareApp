@@ -7,17 +7,21 @@ import java.util.List;
 /**
  * Created by Domnica on 22.08.2016.
  */
-public class Response {
+public class VenuesResponse {
     @SerializedName("response")
-    public SearchResponse response;
+    private Response response;
 
+    public Response getResponse() {
+        return response;
+    }
 
+    public void setResponse(Response response) {
+        this.response = response;
+    }
 
-    public class SearchResponse {
-
+    public class Response {
         @SerializedName("venues")
         List<Venue> venues;
-
 
         public List<Venue> getVenues() {
             return venues;

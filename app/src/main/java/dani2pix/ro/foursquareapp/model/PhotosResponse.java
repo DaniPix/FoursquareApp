@@ -7,9 +7,17 @@ import com.google.gson.annotations.SerializedName;
  */
 public class PhotosResponse {
     @SerializedName("response")
-    public Photos response;
+    private Response response;
 
-    public class Photos {
+    public Response getResponse() {
+        return response;
+    }
+
+    public void setResponse(Response response) {
+        this.response = response;
+    }
+
+    public class Response {
         @SerializedName("photos")
         VenuePhotos photos;
 

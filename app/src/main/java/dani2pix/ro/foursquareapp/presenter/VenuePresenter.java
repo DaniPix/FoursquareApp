@@ -1,6 +1,8 @@
 package dani2pix.ro.foursquareapp.presenter;
 
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +13,8 @@ import dani2pix.ro.foursquareapp.constants.RestConstants;
 import dani2pix.ro.foursquareapp.model.FoursquareService;
 import dani2pix.ro.foursquareapp.model.PhotoItem;
 import dani2pix.ro.foursquareapp.model.PhotosResponse;
-import dani2pix.ro.foursquareapp.model.Response;
 import dani2pix.ro.foursquareapp.model.Venue;
+import dani2pix.ro.foursquareapp.model.VenuesResponse;
 import dani2pix.ro.foursquareapp.view.VenueView;
 import rx.Subscriber;
 import rx.Subscription;
@@ -23,6 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class VenuePresenter implements Presenter<VenueView> {
 
+    private static final String TAG = "VenuePresenter.class";
     private VenueView venueView;
     private Subscription subscription;
     private List<Venue> venues;
@@ -65,27 +68,26 @@ public class VenuePresenter implements Presenter<VenueView> {
         subscription = service.fetchVenues(params)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(application.getSubscribeScheduler())
-                .subscribe(new Subscriber<Response>() {
+                .subscribe(new Subscriber<VenuesResponse>() {
                     @Override
                     public void onCompleted() {
-                        fetchVenuePhoto();
-
+                        fetchVenuesPhotos();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        Log.e(TAG, e.getMessage(), e);
                     }
 
                     @Override
-                    public void onNext(Response response) {
-                        VenuePresenter.this.venues = response.response.getVenues();
+                    public void onNext(VenuesResponse response) {
+                        VenuePresenter.this.venues = response.getResponse().getVenues();
                     }
                 });
     }
 
 
-    private void fetchVenuePhoto() {
+    private void fetchVenuesPhotos() {
         final Map<String, String> params = new HashMap<>();
         params.put("client_id", RestConstants.CLIENT_ID);
         params.put("client_secret", RestConstants.CLIENT_SECRET);
@@ -103,19 +105,20 @@ public class VenuePresenter implements Presenter<VenueView> {
                         public void onCompleted() {
                             updatedVenues.add(venue);
                             if (updatedVenues.size() == venues.size()) {
+                                // after initializing the venues with photos call the adapter
                                 venueView.showVenues(updatedVenues);
                             }
                         }
 
                         @Override
                         public void onError(Throwable e) {
-
+                            Log.e(TAG, e.getMessage(), e);
                         }
 
                         @Override
                         public void onNext(PhotosResponse photosResponse) {
-                            if (!photosResponse.response.getPhotos().getPhotoItems().isEmpty()) {
-                                PhotoItem item = photosResponse.response.getPhotos().getPhotoItems().get(0);
+                            if (!photosResponse.getResponse().getPhotos().getPhotoItems().isEmpty()) {
+                                PhotoItem item = photosResponse.getResponse().getPhotos().getPhotoItems().get(0);
                                 venue.setPhoto(item.getPrefix() + item.getWidth() + "x" + item.getHeight() + item.getSuffix());
                             }
                         }
