@@ -21,6 +21,7 @@ import dani2pix.ro.foursquareapp.view.VenueView;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Domnica on 22.08.2016.
@@ -75,7 +76,7 @@ public class VenuePresenter implements Presenter<VenueView> {
         final FoursquareService service = application.getFourSquareService();
         subscription = service.fetchVenues(params)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(application.getSubscribeScheduler())
+                .subscribeOn(Schedulers.newThread())
                 .subscribe(new Subscriber<VenuesResponse>() {
                     @Override
                     public void onCompleted() {
@@ -109,7 +110,7 @@ public class VenuePresenter implements Presenter<VenueView> {
         for (final Venue venue : venues) {
             subscription = service.fetchVenuePhotos(venue.getId(), params)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(application.getSubscribeScheduler())
+                    .subscribeOn(Schedulers.newThread())
                     .subscribe(new Subscriber<PhotosResponse>() {
                         @Override
                         public void onCompleted() {
