@@ -1,6 +1,8 @@
 package dani2pix.ro.foursquareapp.presenter;
 
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -30,11 +32,16 @@ public class VenuePresenter implements Presenter<VenueView> {
     private Subscription subscription;
     private List<Venue> venues;
     private List<Venue> updatedVenues;
+    private Context mContext;
+    private ProgressDialog mProgressDialog;
+
+    public VenuePresenter(Context context){
+        mContext = context;
+    }
 
     @Override
     public void attachView(VenueView view) {
         this.venueView = view;
-
     }
 
     @Override
@@ -55,12 +62,13 @@ public class VenuePresenter implements Presenter<VenueView> {
             subscription.unsubscribe();
         }
 
-
+        mProgressDialog = new ProgressDialog(mContext, ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.show();
         Map<String, String> params = new HashMap<>();
         params.put("client_id", RestConstants.CLIENT_ID);
         params.put("client_secret", RestConstants.CLIENT_SECRET);
         params.put("v", "20130815");
-        params.put("ll", "40.7,-74");
+        params.put("ll", location);
         params.put("query", query);
 
         FoursquareApplication application = new FoursquareApplication();
@@ -88,6 +96,7 @@ public class VenuePresenter implements Presenter<VenueView> {
 
 
     private void fetchVenuesPhotos() {
+
         final Map<String, String> params = new HashMap<>();
         params.put("client_id", RestConstants.CLIENT_ID);
         params.put("client_secret", RestConstants.CLIENT_SECRET);
@@ -96,6 +105,7 @@ public class VenuePresenter implements Presenter<VenueView> {
         FoursquareApplication application = new FoursquareApplication();
         final FoursquareService service = application.getFourSquareService();
         updatedVenues = new ArrayList<>();
+
         for (final Venue venue : venues) {
             subscription = service.fetchVenuePhotos(venue.getId(), params)
                     .observeOn(AndroidSchedulers.mainThread())
@@ -107,6 +117,7 @@ public class VenuePresenter implements Presenter<VenueView> {
                             if (updatedVenues.size() == venues.size()) {
                                 // after initializing the venues with photos call the adapter
                                 venueView.showVenues(updatedVenues);
+                                mProgressDialog.dismiss();
                             }
                         }
 

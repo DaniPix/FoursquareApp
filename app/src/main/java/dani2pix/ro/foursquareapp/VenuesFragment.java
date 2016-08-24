@@ -43,7 +43,7 @@ public class VenuesFragment extends Fragment implements VenueView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        venuePresenter = new VenuePresenter();
+        venuePresenter = new VenuePresenter(getActivity());
         venuePresenter.attachView(this);
         setRetainInstance(true);
         setHasOptionsMenu(true);
