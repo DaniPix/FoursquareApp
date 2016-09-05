@@ -18,6 +18,8 @@ import dani2pix.ro.foursquareapp.model.PhotosResponse;
 import dani2pix.ro.foursquareapp.model.Venue;
 import dani2pix.ro.foursquareapp.model.VenuesResponse;
 import dani2pix.ro.foursquareapp.view.VenueView;
+import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -74,25 +76,27 @@ public class VenuePresenter implements Presenter<VenueView> {
 
         FoursquareApplication application = new FoursquareApplication();
         final FoursquareService service = application.getFourSquareService();
-        subscription = service.fetchVenues(params)
-                .observeOn(AndroidSchedulers.mainThread())
+
+
+        Observable<VenuesResponse> venuesResponseObservable = service.fetchVenues(params);
+        subscription = venuesResponseObservable.observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.newThread())
-                .subscribe(new Subscriber<VenuesResponse>() {
-                    @Override
-                    public void onCompleted() {
-                        fetchVenuesPhotos();
-                    }
+                .subscribe(new Observer<VenuesResponse>() {
+            @Override
+            public void onCompleted() {
+                fetchVenuesPhotos();
+            }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.e(TAG, e.getMessage(), e);
-                    }
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, e.getMessage(), e);
+            }
 
-                    @Override
-                    public void onNext(VenuesResponse response) {
-                        VenuePresenter.this.venues = response.getResponse().getVenues();
-                    }
-                });
+            @Override
+            public void onNext(VenuesResponse venuesResponse) {
+                VenuePresenter.this.venues = venuesResponse.getResponse().getVenues();
+            }
+        });
     }
 
 
