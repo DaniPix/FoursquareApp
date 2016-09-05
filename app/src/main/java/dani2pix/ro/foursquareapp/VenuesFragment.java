@@ -82,6 +82,7 @@ public class VenuesFragment extends Fragment implements VenuesView {
                 fragment.setArguments(bundle);
                 manager.beginTransaction()
                         .replace(R.id.searchContainer, fragment, VenueFragment.class.getCanonicalName())
+                        .addToBackStack(null)
                         .commit();
             }
         }));
