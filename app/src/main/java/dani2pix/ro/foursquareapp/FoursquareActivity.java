@@ -1,10 +1,10 @@
 package dani2pix.ro.foursquareapp;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import butterknife.BindView;
@@ -23,10 +23,12 @@ public class FoursquareActivity extends AppCompatActivity {
         initializeToolbar();
         if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            Fragment fragment = new VenuesFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.searchContainer, fragment, VenuesFragment.class.getCanonicalName())
-                    .commit();
+            if (fragmentManager.findFragmentByTag(VenuesFragment.class.getCanonicalName()) == null) {
+                Fragment fragment = new VenuesFragment();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.searchContainer, fragment, VenuesFragment.class.getCanonicalName())
+                        .commit();
+            }
         }
     }
 

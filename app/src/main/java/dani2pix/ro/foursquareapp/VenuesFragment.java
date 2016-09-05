@@ -38,6 +38,8 @@ public class VenuesFragment extends Fragment implements VenueView {
     @BindView(R.id.venuesList)
     RecyclerView mVenuesList;
 
+    List<Venue> mVenues;
+
     private String mCurrentLocation;
 
     @Override
@@ -61,12 +63,17 @@ public class VenuesFragment extends Fragment implements VenueView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.venues_fragment_layout, container, false);
         ButterKnife.bind(this, view);
+        if(mVenues != null) {
+            mVenuesList.setAdapter(new VenuesAdapter(getContext(), mVenues, R.layout.venues_item_layout));
+            mVenuesList.setLayoutManager(new LinearLayoutManager(getContext()));
+        }
         return view;
     }
 
     @Override
     public void showVenues(List<Venue> venues) {
         if (venues != null && !venues.isEmpty()) {
+            mVenues = venues;
             mVenuesList.setAdapter(new VenuesAdapter(getContext(), venues, R.layout.venues_item_layout));
             mVenuesList.setLayoutManager(new LinearLayoutManager(getContext()));
         } else {
