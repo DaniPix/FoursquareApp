@@ -27,6 +27,7 @@ public class FoursquareActivity extends AppCompatActivity {
                 Fragment fragment = new VenuesFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.searchContainer, fragment, VenuesFragment.class.getCanonicalName())
+                        .addToBackStack(null)
                         .commit();
             }
         }

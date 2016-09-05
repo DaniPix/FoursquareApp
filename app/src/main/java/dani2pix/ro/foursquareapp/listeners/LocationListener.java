@@ -10,7 +10,7 @@ import android.support.v4.content.ContextCompat;
 
 import java.lang.ref.WeakReference;
 
-import dani2pix.ro.foursquareapp.view.VenueView;
+import dani2pix.ro.foursquareapp.view.VenuesView;
 
 /**
  * Created by Domnica on 23.08.2016.
@@ -23,9 +23,9 @@ public class LocationListener implements android.location.LocationListener {
     private static final long LOCATION_REFRESH_TIME = 10000; // milliseconds
 
 
-    private WeakReference<VenueView> mView;
+    private WeakReference<VenuesView> mView;
 
-    public LocationListener(Activity activity, VenueView view) {
+    public LocationListener(Activity activity, VenuesView view) {
         this.mView = new WeakReference<>(view);
         setUpLocation(activity);
     }

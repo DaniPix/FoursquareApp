@@ -2,10 +2,12 @@ package dani2pix.ro.foursquareapp.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by Domnica on 22.08.2016.
  */
-public class Location {
+public class Location implements Serializable {
     @SerializedName("address")
     private String address;
     @SerializedName("distance")

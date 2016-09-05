@@ -5,6 +5,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,17 +24,18 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import dani2pix.ro.foursquareapp.adapter.VenuesAdapter;
 import dani2pix.ro.foursquareapp.listeners.LocationListener;
+import dani2pix.ro.foursquareapp.listeners.VenuesClickListener;
 import dani2pix.ro.foursquareapp.model.Venue;
-import dani2pix.ro.foursquareapp.presenter.VenuePresenter;
-import dani2pix.ro.foursquareapp.view.VenueView;
+import dani2pix.ro.foursquareapp.presenter.VenuesPresenter;
+import dani2pix.ro.foursquareapp.view.VenuesView;
 
 
 /**
  * Created by Domnica on 22.08.2016.
  */
-public class VenuesFragment extends Fragment implements VenueView {
+public class VenuesFragment extends Fragment implements VenuesView {
 
-    private VenuePresenter venuePresenter;
+    private VenuesPresenter venuesPresenter;
 
     @BindView(R.id.venuesList)
     RecyclerView mVenuesList;
@@ -45,9 +47,8 @@ public class VenuesFragment extends Fragment implements VenueView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        venuePresenter = new VenuePresenter(getActivity());
-        venuePresenter.attachView(this);
-        setRetainInstance(true);
+        venuesPresenter = new VenuesPresenter(getActivity());
+        venuesPresenter.attachView(this);
         setHasOptionsMenu(true);
         new LocationListener(getActivity(), this);
     }
@@ -55,7 +56,7 @@ public class VenuesFragment extends Fragment implements VenueView {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        venuePresenter.detachView();
+        venuesPresenter.detachView();
     }
 
     @Nullable
@@ -63,10 +64,27 @@ public class VenuesFragment extends Fragment implements VenueView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.venues_fragment_layout, container, false);
         ButterKnife.bind(this, view);
-        if(mVenues != null) {
+        if (mVenues != null) {
             mVenuesList.setAdapter(new VenuesAdapter(getContext(), mVenues, R.layout.venues_item_layout));
             mVenuesList.setLayoutManager(new LinearLayoutManager(getContext()));
         }
+
+        mVenuesList.addOnItemTouchListener(new VenuesClickListener(getContext(), mVenuesList, new VenuesClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                FragmentManager manager = getFragmentManager();
+                Fragment fragment = new VenueFragment();
+                Bundle bundle = new Bundle();
+                Venue venue = mVenues.get(position);
+                bundle.putString("name", venue.getName());
+                bundle.putSerializable("location", venue.getLocation());
+                bundle.putString("photo", venue.getPhoto());
+                fragment.setArguments(bundle);
+                manager.beginTransaction()
+                        .replace(R.id.searchContainer, fragment, VenueFragment.class.getCanonicalName())
+                        .commit();
+            }
+        }));
         return view;
     }
 
@@ -101,7 +119,7 @@ public class VenuesFragment extends Fragment implements VenueView {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                venuePresenter.loadVenues(query, mCurrentLocation);
+                venuesPresenter.loadVenues(query, mCurrentLocation);
                 return false;
             }
 
