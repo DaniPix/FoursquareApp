@@ -33,6 +33,8 @@ public class SplashScreen extends AppCompatActivity {
                 public void run() {
                     Intent intent = new Intent(SplashScreen.this, FoursquareActivity.class);
                     startActivity(intent);
+                    overridePendingTransition(R.anim.slide_left, R.anim.stop);
+                    finish();
                 }
             }, 3000);
         }
